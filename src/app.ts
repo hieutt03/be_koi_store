@@ -10,11 +10,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
-    res.send("Hello World");
+    res.send("Hello");
 });
 
 
 app.use("/api/users", userRoutes);
+
 sequelize.sync().then(()=> {
     console.log('Database Connected');
 })
