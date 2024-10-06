@@ -1,0 +1,43 @@
+services:
+  mysqldb:
+    image: mysql:8.0
+    container_name: dev-mysqldb
+    restart:  always
+    env_file: ./.env
+    environment:
+      - MYSQL_DATABASE=$DB_NAME
+      - MYSQL_ROOT_PASSWORD=$DB_PASSWORD
+    ports:
+      - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
+    volumes:
+      - db:/var/lib/mysql
+    networks:
+      - backend
+
+
+
+  server:
+    container_name: dev-backend
+    build: .
+    restart: unless-stopped
+    depends_on:
+      - mysqldb
+    env_file: ./.env
+    environment:
+      - SYSTEM_ENV=$SYSTEM_ENV
+      - DB_HOST=mysqldb
+      - DB_USER=$DB_USER
+      - DB_PASSWORD=$DB_PASSWORD
+      - DB_NAME=$DB_NAME
+      - DB_PORT=$MYSQLDB_DOCKER_PORT
+      - CLIENT_ORIGIN=$CLIENT_ORIGIN
+    ports:
+      - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
+    networks:
+      - backend
+
+volumes:
+  db:
+
+networks:
+  backend:
