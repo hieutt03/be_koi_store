@@ -2,32 +2,32 @@ import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../config/db";
 import User from "./user.model";
 import Pool from "./pool.model";
+import { Status, Type } from "../contants/enums";
 
 interface FishAttributes {
-  fishId: number,
-  name: string,
-  image: string,
-  features: string,
-  tag: string,
-  status: Status,
-  price: number,
-  type: Type,
-  sex: boolean,
-  origin: string,
-  age: number,
-  weight: number,
-  species: string,
-  character: string,
-  foodIntake: string,
-  screeningRate: number,
-  unique: boolean,
-  packageId: number,
-  ownerId: number,
-  poolId: number
+  fishId: number;
+  name: string;
+  image: string;
+  features: string;
+  tag: string;
+  status: Status;
+  price: number;
+  type: Type;
+  sex: boolean;
+  origin: string;
+  age: number;
+  weight: number;
+  species: string;
+  character: string;
+  foodIntake: string;
+  screeningRate: number;
+  unique: boolean;
+  packageId: number;
+  ownerId: number;
+  poolId: number;
 }
 
-interface FishCreationAttributes extends Optional<FishAttributes, "fishId"> {
-}
+interface FishCreationAttributes extends Optional<FishAttributes, "fishId"> {}
 
 class Fish extends Model<FishAttributes, FishCreationAttributes> implements FishAttributes {
   public fishId!: number;
@@ -57,96 +57,96 @@ Fish.init(
     fishId: {
       type: DataTypes.INTEGER.UNSIGNED,
       autoIncrement: true,
-      primaryKey: true
+      primaryKey: true,
     },
     name: {
       type: DataTypes.STRING(128),
-      allowNull: false
+      allowNull: false,
     },
     image: {
       type: DataTypes.STRING(128),
-      allowNull: false
+      allowNull: false,
     },
     features: {
       type: DataTypes.STRING(500),
-      allowNull: true
+      allowNull: true,
     },
     tag: {
       type: DataTypes.STRING(128),
-      allowNull: true
+      allowNull: true,
     },
     status: {
       type: DataTypes.ENUM(...Object.values(Status)),
-      defaultValue: Status.Active
+      defaultValue: Status.Active,
     },
     price: {
       type: DataTypes.FLOAT,
-      defaultValue: 0
+      defaultValue: 0,
     },
     type: {
       type: DataTypes.ENUM(...Object.values(Type)),
-      defaultValue: Type.PureVietnamese
+      defaultValue: Type.PureVietnamese,
     },
     sex: {
       type: DataTypes.BOOLEAN,
-      defaultValue: true
+      defaultValue: true,
     },
     origin: {
       type: DataTypes.STRING(128),
-      allowNull: false
+      allowNull: false,
     },
     age: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
     },
     species: {
       type: DataTypes.STRING(128),
-      allowNull: false
+      allowNull: false,
     },
     screeningRate: {
       type: DataTypes.FLOAT,
-      allowNull: true
+      allowNull: true,
     },
     weight: {
       type: DataTypes.FLOAT,
-      allowNull: true
+      allowNull: true,
     },
     ownerId: {
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
       references: {
         model: User,
-        key: "userId"
-      }
+        key: "userId",
+      },
     },
     packageId: {
       type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: true
+      allowNull: true,
     },
     poolId: {
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
       references: {
         model: Pool,
-        key: "poolId"
-      }
+        key: "poolId",
+      },
     },
     character: {
       type: DataTypes.STRING(128),
-      allowNull: false
+      allowNull: false,
     },
     foodIntake: {
       type: DataTypes.STRING(128),
-      allowNull: false
+      allowNull: false,
     },
     unique: {
       type: DataTypes.BOOLEAN,
-      allowNull: false
-    }
+      allowNull: false,
+    },
   },
   {
     tableName: "fishes",
-    sequelize
+    sequelize,
   }
 );
 
@@ -154,6 +154,6 @@ Fish.belongsTo(User, { foreignKey: "ownerId" });
 User.hasMany(Fish, { foreignKey: "ownerId" });
 Fish.belongsTo(Pool, { foreignKey: "poolId" });
 Pool.hasMany(Fish, {
-  foreignKey: "poolId"
+  foreignKey: "poolId",
 });
 export default Fish;

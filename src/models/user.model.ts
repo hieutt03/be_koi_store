@@ -1,5 +1,6 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../config/db";
+import { Role } from "../contants/enums";
 
 interface UserAttributes {
   userId: number;
@@ -10,11 +11,9 @@ interface UserAttributes {
   role: Role;
   gender: boolean;
   address: string;
-  
 }
 
-interface UserCreationAttributes extends Optional<UserAttributes, "userId"> {
-}
+interface UserCreationAttributes extends Optional<UserAttributes, "userId"> {}
 
 class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   public userId!: number;
@@ -32,41 +31,40 @@ User.init(
     userId: {
       type: DataTypes.INTEGER.UNSIGNED,
       autoIncrement: true,
-      primaryKey: true
+      primaryKey: true,
     },
     name: {
       type: DataTypes.STRING(128),
-      allowNull: false
+      allowNull: false,
     },
     email: {
       type: DataTypes.STRING(128),
-      allowNull: false
+      allowNull: false,
     },
     password: {
       type: DataTypes.STRING(128),
-      allowNull: false
+      allowNull: false,
     },
     active: {
       type: DataTypes.BOOLEAN,
-      defaultValue: true
+      defaultValue: true,
     },
     role: {
       type: DataTypes.ENUM(...Object.values(Role)),
-      defaultValue: Role.Customer
+      defaultValue: Role.Customer,
     },
     gender: {
       type: DataTypes.BOOLEAN,
-      defaultValue: true
+      defaultValue: true,
     },
     address: {
       type: DataTypes.STRING(128),
-      allowNull: true
-    }
-    
+      allowNull: true,
+    },
   },
   {
     tableName: "users",
-    sequelize
+    sequelize,
   }
 );
 export default User;

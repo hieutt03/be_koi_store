@@ -13,10 +13,12 @@ interface OrderSaleDetailAttributes {
   packageId: number;
 }
 
-interface OrderSaleDetailCreationAttributes extends Optional<OrderSaleDetailAttributes, "orderSaleDetailId"> {
-}
+interface OrderSaleDetailCreationAttributes extends Optional<OrderSaleDetailAttributes, "orderSaleDetailId"> {}
 
-class OrderSaleDetail extends Model<OrderSaleDetailAttributes, OrderSaleDetailCreationAttributes> implements OrderSaleDetailAttributes {
+class OrderSaleDetail
+  extends Model<OrderSaleDetailAttributes, OrderSaleDetailCreationAttributes>
+  implements OrderSaleDetailAttributes
+{
   public orderSaleDetailId!: number;
   public orderSaleId!: number;
   public quantity!: number;
@@ -24,44 +26,47 @@ class OrderSaleDetail extends Model<OrderSaleDetailAttributes, OrderSaleDetailCr
   public packageId!: number;
 }
 
-OrderSaleDetail.init({
-  orderSaleDetailId: {
-    type: DataTypes.INTEGER.UNSIGNED,
-    primaryKey: true,
-    autoIncrement: true
+OrderSaleDetail.init(
+  {
+    orderSaleDetailId: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    quantity: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    fishId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: Fish,
+        key: "fishId",
+      },
+    },
+    packageId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: Package,
+        key: "packageId",
+      },
+    },
+    orderSaleId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: OrderSale,
+        key: "orderSaleId",
+      },
+    },
   },
-  quantity: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
-  fishId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: Fish,
-      key: "fishId"
-    }
-  },
-  packageId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: Package,
-      key: "packageId"
-    }
-  },
-  orderSaleId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: OrderSale,
-      key: "orderSaleId"
-    }
+  {
+    tableName: "order-sale-details",
+    sequelize,
   }
-}, {
-  tableName: "order-sale-details",
-  sequelize
-});
+);
 OrderSaleDetail.belongsTo(OrderSale, { foreignKey: "orderSaleId" });
 OrderSale.hasMany(OrderSaleDetail, { foreignKey: "orderSaleId" });
 
@@ -69,8 +74,7 @@ OrderSaleDetail.hasOne(Fish, { foreignKey: "fishId" });
 Fish.belongsTo(OrderSaleDetail, { foreignKey: "fishId" });
 
 OrderSaleDetail.hasOne(Package, {
-  foreignKey: "packageId"
+  foreignKey: "packageId",
 });
 Package.belongsTo(OrderSaleDetail, { foreignKey: "packageId" });
 export default OrderSaleDetail;
-

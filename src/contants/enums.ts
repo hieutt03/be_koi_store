@@ -1,23 +1,23 @@
-enum Status {
+export enum Status {
   Sold = "sold",
   Active = "active",
   Inactive = "inactive",
-  Consign = "consign"
+  Consign = "consign",
 }
 
-enum Role {
+export enum Role {
   Customer = "customer",
   Manager = "manager",
-  Staff = "staff"
+  Staff = "staff",
 }
 
-enum Type {
+export enum Type {
   ImportedPurebred = "thuần chủng nhập khẩu",
   HybridF1 = "lai F1",
-  PureVietnamese = "thuần Việt"
+  PureVietnamese = "thuần Việt",
 }
 
-enum PoolType {
+export enum PoolType {
   General = "general",
-  Specific = "specific"
+  Specific = "specific",
 }

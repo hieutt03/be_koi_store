@@ -4,17 +4,16 @@ import User from "./user.model";
 
 interface OrderSaleAttributes {
   orderSaleId: number;
-  paid: boolean,
-  totalPrice: number,
-  quantity: number,
-  voucherCode: string,
-  buyerId: number,
-  orderAt: Date,
-  staffId: number
+  paid: boolean;
+  totalPrice: number;
+  quantity: number;
+  voucherCode: string;
+  buyerId: number;
+  orderAt: Date;
+  staffId: number;
 }
 
-interface OrderSaleCreateAttributes extends Optional<OrderSaleAttributes, "orderSaleId"> {
-}
+interface OrderSaleCreateAttributes extends Optional<OrderSaleAttributes, "orderSaleId"> {}
 
 class OrderSale extends Model<OrderSaleAttributes, OrderSaleCreateAttributes> implements OrderSaleAttributes {
   public orderSaleId!: number;
@@ -27,64 +26,65 @@ class OrderSale extends Model<OrderSaleAttributes, OrderSaleCreateAttributes> im
   public staffId!: number;
 }
 
-OrderSale.init({
+OrderSale.init(
+  {
     orderSaleId: {
       type: DataTypes.INTEGER.UNSIGNED,
       autoIncrement: true,
-      primaryKey: true
+      primaryKey: true,
     },
     paid: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      defaultValue: false
+      defaultValue: false,
     },
     quantity: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
     },
     totalPrice: {
       type: DataTypes.FLOAT,
-      allowNull: false
+      allowNull: false,
     },
     voucherCode: {
       type: DataTypes.STRING(128),
-      allowNull: true
+      allowNull: true,
     },
     buyerId: {
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
       references: {
         model: User,
-        key: "userId"
-      }
+        key: "userId",
+      },
     },
     orderAt: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: Date.now()
+      defaultValue: new Date(),
     },
     staffId: {
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
       references: {
         model: User,
-        key: "userId"
-      }
-    }
+        key: "userId",
+      },
+    },
   },
   {
     tableName: "OrderSales",
-    sequelize
-  });
+    sequelize,
+  }
+);
 
 OrderSale.belongsTo(User, { foreignKey: "buyerId" });
 OrderSale.belongsTo(User, { foreignKey: "staffId" });
 User.hasMany(OrderSale, {
-  foreignKey: "buyerId"
+  foreignKey: "buyerId",
 });
 User.hasMany(OrderSale, {
-  foreignKey: "staffId"
+  foreignKey: "staffId",
 });
 
 export default OrderSale;
-

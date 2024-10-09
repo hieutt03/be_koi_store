@@ -1,5 +1,6 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../config/db";
+import { PoolType } from "../contants/enums";
 
 interface PoolAttributes {
   poolId: number;
@@ -14,8 +15,7 @@ interface PoolAttributes {
   soldQuantity: number;
 }
 
-interface PoolCreationAttributes extends Optional<PoolAttributes, "poolId"> {
-}
+interface PoolCreationAttributes extends Optional<PoolAttributes, "poolId"> {}
 
 class Pool extends Model<PoolAttributes, PoolCreationAttributes> implements PoolAttributes {
   public poolId!: number;
@@ -30,51 +30,54 @@ class Pool extends Model<PoolAttributes, PoolCreationAttributes> implements Pool
   public code!: string;
 }
 
-Pool.init({
-  poolId: {
-    type: DataTypes.INTEGER.UNSIGNED,
-    autoIncrement: true,
-    primaryKey: true
+Pool.init(
+  {
+    poolId: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      autoIncrement: true,
+      primaryKey: true,
+    },
+    name: {
+      type: DataTypes.STRING(128),
+      allowNull: false,
+    },
+    description: {
+      type: DataTypes.STRING(500),
+      allowNull: true,
+    },
+    type: {
+      type: DataTypes.ENUM(...Object.values(PoolType)),
+      allowNull: false,
+    },
+    initQuantity: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    remainQuantity: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    speciesFish: {
+      type: DataTypes.STRING(128),
+      allowNull: false,
+    },
+    soldQuantity: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    maxQuantity: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    code: {
+      type: DataTypes.STRING(128),
+      allowNull: false,
+    },
   },
-  name: {
-    type: DataTypes.STRING(128),
-    allowNull: false
-  },
-  description: {
-    type: DataTypes.STRING(500),
-    allowNull: true
-  },
-  type: {
-    type: DataTypes.ENUM(...Object.values(PoolType)),
-    allowNull: false
-  },
-  initQuantity: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
-  remainQuantity: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
-  speciesFish: {
-    type: DataTypes.STRING(128),
-    allowNull: false
-  },
-  soldQuantity: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
-  maxQuantity: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
-  code: {
-    type: DataTypes.STRING(128),
-    allowNull: false
+  {
+    tableName: "pools",
+    sequelize,
   }
-}, {
-  tableName: "pools",
-  sequelize
-});
+);
 
 export default Pool;

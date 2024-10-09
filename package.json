@@ -25,6 +25,7 @@
     "morgan": "^1.10.0",
     "mysql2": "^3.11.3",
     "nodemon": "^3.1.7",
+    "project": "file:",
     "sequelize": "^6.37.4",
     "ts-node-dev": "^2.0.0",
     "zod": "^3.23.8"
@@ -33,9 +34,9 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/cookie-parser": "^1.4.7",
     "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
     "@types/jsonwebtoken": "^9.0.7",
     "@types/morgan": "^1.9.9",
-    "@types/express": "^5.0.0",
     "@types/node": "^22.7.4",
     "@types/sequelize": "^4.28.20",
     "ts-node": "^10.9.2",

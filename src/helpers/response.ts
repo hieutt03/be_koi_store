@@ -1,8 +1,8 @@
-const createResponse = (success: boolean, message: string, data: any = null) => {
-    return {
-        success,
-        message,
-        data,
-    };
+const ResponseDTO = (message: string, data: any = null, success: boolean = true) => {
+  return {
+    message,
+    data,
+    success,
+  };
 };
-export default createResponse;
+export default ResponseDTO;

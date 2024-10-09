@@ -11,8 +11,7 @@ interface PackageAttributes {
   ownerId: string;
 }
 
-interface PackageCreationAttributes extends Optional<PackageAttributes, "packageId"> {
-}
+interface PackageCreationAttributes extends Optional<PackageAttributes, "packageId"> {}
 
 class Package extends Model<PackageAttributes, PackageCreationAttributes> implements PackageAttributes {
   public name!: string;
@@ -22,39 +21,42 @@ class Package extends Model<PackageAttributes, PackageCreationAttributes> implem
   public ownerId!: string;
 }
 
-Package.init({
-  packageId: {
-    type: DataTypes.INTEGER.UNSIGNED,
-    autoIncrement: true,
-    primaryKey: true
+Package.init(
+  {
+    packageId: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      autoIncrement: true,
+      primaryKey: true,
+    },
+    name: {
+      type: DataTypes.STRING(128),
+      allowNull: false,
+    },
+    quantity: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      allowNull: false,
+    },
+    soldAt: {
+      type: DataTypes.DATE,
+      defaultValue: new Date(),
+    },
+    ownerId: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      allowNull: false,
+      references: {
+        model: User,
+        key: "userId",
+      },
+    },
   },
-  name: {
-    type: DataTypes.STRING(128),
-    allowNull: false
-  },
-  quantity: {
-    type: DataTypes.INTEGER.UNSIGNED,
-    allowNull: false
-  },
-  soldAt: {
-    type: DataTypes.DATE,
-    defaultValue: Date.now()
-  },
-  ownerId: {
-    type: DataTypes.INTEGER.UNSIGNED,
-    allowNull: false,
-    references: {
-      model: "User",
-      key: "userId"
-    }
+  {
+    tableName: "Packages",
+    sequelize,
   }
-}, {
-  tableName: "Packages",
-  sequelize
-});
+);
 
 Package.hasMany(Fish, { foreignKey: "packageId" });
 Package.hasOne(User, {
-  foreignKey: "ownerId"
+  foreignKey: "ownerId",
 });
 export default Package;

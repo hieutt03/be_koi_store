@@ -1,8 +1,8 @@
-import { Router } from 'express';
+import { Router } from "express";
+import { getAllFishes } from "../modules/fish/fish.controller";
 
 const fishRoute: Router = Router();
 
-// fishRoute.post('/', createUser);
-fishRoute.get('/', )
+fishRoute.get("/", getAllFishes);
 
 export default fishRoute;
