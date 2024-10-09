@@ -73,7 +73,7 @@ OrderSale.init(
     },
   },
   {
-    tableName: "OrderSales",
+    tableName: "order-sales",
     sequelize,
   }
 );
@@ -86,5 +86,4 @@ User.hasMany(OrderSale, {
 User.hasMany(OrderSale, {
   foreignKey: "staffId",
 });
-
 export default OrderSale;

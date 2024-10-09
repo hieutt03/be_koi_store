@@ -37,7 +37,12 @@ app.get("/", (req, res) => {
 
 // app.use(errorHandlingMiddleware);
 
-sequelize.sync().then(() => {
-  console.log("Database Connected");
-});
+(async () => {
+  try {
+    await sequelize;
+    console.log("Database setup success.");
+  } catch (error) {
+    console.error("Error init database:", error);
+  }
+})();
 export default app;

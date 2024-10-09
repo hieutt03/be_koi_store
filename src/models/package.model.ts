@@ -50,7 +50,7 @@ Package.init(
     },
   },
   {
-    tableName: "Packages",
+    tableName: "packages",
     sequelize,
   }
 );

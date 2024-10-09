@@ -37,7 +37,7 @@ Voucher.init({
     allowNull: false
   }
 }, {
-  tableName: "Vouchers",
+  tableName: "vouchers",
   sequelize
 });
 export default Voucher;

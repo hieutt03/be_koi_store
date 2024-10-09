@@ -1,7 +1,7 @@
 services:
   mysqldb:
     image: mysql:8.0
-    container_name: dev-mysqldb
+    container_name: mma-mysqldb
     restart:  always
     env_file: ./.env
     environment:
@@ -13,15 +13,19 @@ services:
       - db:/var/lib/mysql
     networks:
       - backend
-
-
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   server:
-    container_name: dev-backend
+    container_name: mma-backend
     build: .
     restart: unless-stopped
     depends_on:
-      - mysqldb
+      mysqldb:
+        condition: service_started
     env_file: ./.env
     environment:
       - SYSTEM_ENV=$SYSTEM_ENV
