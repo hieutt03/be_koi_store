@@ -11,7 +11,6 @@ const errorHandlingMiddleware = (err: ApiError, req: Request, res: Response, nex
   console.log(err.data);
 
   const responseError = err.data || {
-    // stack: err.stack
     statusCode: err.statusCode,
     message: err.message || StatusCodes[err.statusCode],
     errors: undefined as ValidationErrors | undefined,
