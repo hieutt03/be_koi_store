@@ -12,9 +12,9 @@ export enum Role {
 }
 
 export enum Type {
-  ImportedPurebred = "thuần chủng nhập khẩu",
-  HybridF1 = "lai F1",
-  PureVietnamese = "thuần Việt",
+  ImportedPurebred = "Thuần chủng nhập khẩu",
+  HybridF1 = "Lai F1",
+  PureVietnamese = "Thuần Việt",
 }
 
 export enum PoolType {
