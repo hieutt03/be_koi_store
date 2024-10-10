@@ -1,4 +1,4 @@
-import Pool from "../../models/pool.model";
+import Pool, { PoolCreationAttributes } from "../../models/pool.model";
 
 export class PoolService {
   static async getAllPools(): Promise<Pool[]> {
@@ -8,15 +8,16 @@ export class PoolService {
           ["createdAt", "DESC"]
         ]
       });
-    } catch (e) {
-      throw "Something went wrong.";
+    } catch (e:any) {
+      throw Error(e.message || "Something went wrong.");
     }
   }
-  static async createPool(pool: Pool): Promise<Pool> {
+  
+  static async create(pool: PoolCreationAttributes): Promise<Pool> {
     try {
       return await Pool.create(pool);
-    } catch (e) {
-      throw "Something went wrong.";
+    } catch (e:any) {
+      throw Error(e.message || "Something went wrong.");
     }
   }
 }

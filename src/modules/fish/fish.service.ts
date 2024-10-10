@@ -1,4 +1,4 @@
-import Fish from "../../models/fish.model";
+import Fish, { FishCreationAttributes } from "../../models/fish.model";
 
 export class FishService {
   static async getAllFishes(): Promise<Fish[]> {
@@ -8,24 +8,24 @@ export class FishService {
           ["createdAt", "DESC"]
         ]
       });
-    } catch (e) {
-      throw "Something went wrong.";
+    } catch (e: any) {
+      throw Error(e.message || "Something went wrong.");
     }
   }
   
   static async getFishByUserId(fishId: String): Promise<Fish | null> {
     try {
       return Fish.findByPk(Number(fishId));
-    } catch (e) {
-      throw "Something went wrong.";
+    } catch (e: any) {
+      throw Error(e.message || "Something went wrong.");
     }
   }
   
-  // static async createFish(fish: Fish): Promise<Fish> {
-  //   try {
-  //
-  //   } catch (e) {
-  //     throw "Something went wrong.";
-  //   }
-  // }
+  static async createFish(fish: FishCreationAttributes): Promise<Fish> {
+    try {
+      return await Fish.create(fish);
+    } catch (e: any) {
+      throw Error(e.message || "Something went wrong.");
+    }
+  }
 }

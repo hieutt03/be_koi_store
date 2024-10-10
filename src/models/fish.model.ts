@@ -18,7 +18,7 @@ interface FishAttributes {
   origin: string;
   age: number;
   weight: number;
-  species: string;
+  species: number;
   character: string;
   foodIntake: string;
   screeningRate: number;
@@ -28,7 +28,7 @@ interface FishAttributes {
   poolId: number;
 }
 
-interface FishCreationAttributes extends Optional<FishAttributes, "fishId"> {
+export interface FishCreationAttributes extends Optional<FishAttributes, "fishId"> {
 }
 
 class Fish extends Model<FishAttributes, FishCreationAttributes> implements FishAttributes {
@@ -46,7 +46,7 @@ class Fish extends Model<FishAttributes, FishCreationAttributes> implements Fish
   public price!: number;
   public screeningRate!: number;
   public sex!: boolean;
-  public species!: string;
+  public species!: number;
   public status!: Status;
   public tag!: string;
   public type!: Type;
@@ -119,7 +119,7 @@ Fish.init(
     },
     ownerId: {
       type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: User,
         key: "userId"
@@ -155,7 +155,6 @@ Fish.init(
     sequelize
   }
 );
-
 Fish.belongsTo(User, { foreignKey: "ownerId" });
 User.hasMany(Fish, { foreignKey: "ownerId" });
 Fish.belongsTo(Pool, { foreignKey: "poolId" });

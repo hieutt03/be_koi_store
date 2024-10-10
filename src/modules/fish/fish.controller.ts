@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { FishService } from "./fish.service";
 import ResponseDTO from "../../helpers/response";
-import Fish from "../../models/fish.model";
+import Fish, { FishCreationAttributes } from "../../models/fish.model";
+import fishModel from "../../models/fish.model";
 
 export const getAllFishes = async (req: Request, res: Response, next: NextFunction) => {
   const allFishes = await FishService.getAllFishes();
@@ -14,7 +15,11 @@ export const getFishById = async (req: Request, res: Response, next: NextFunctio
 };
 
 export const createFish = async (req: Request, res: Response, next: NextFunction) => {
-  const fishData: Fish = req.body;
-  console.log(fishData);
-  res.status(201).json(ResponseDTO("Create success!"));
+  try {
+    const fishData: FishCreationAttributes = req.body;
+    await FishService.createFish(fishData);
+    res.status(201).json(ResponseDTO("Create success!"));
+  } catch (e) {
+    next(e);
+  }
 };

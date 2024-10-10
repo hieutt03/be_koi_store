@@ -1,26 +1,38 @@
 import { NextFunction, Request, Response } from "express";
 import { FishTypeService } from "./fish-type.service";
-import ResponseDTO from "../../helpers/response";
+import { badRequest, created, ok } from "../../utils/util";
 
 export const autoCreateFishType = async (req: Request, res: Response, next: NextFunction) => {
-  const types = ["Koi Nhật Bản", "Koi Tây Ban Nha", "Koi Hàn Quốc"];
-  for (const type of types) {
-    await FishTypeService.create(type);
+  try {
+    const types = ["Koi Nhật Bản", "Koi Tây Ban Nha", "Koi Hàn Quốc"];
+    for (const type of types) {
+      await FishTypeService.create(type);
+    }
+    created(res, "Auto create OK!");
+  } catch (e) {
+    next(e);
   }
-  res.status(201).json(ResponseDTO("Auto create OK!"));
 };
 
 export const createFishType = async (req: Request, res: Response, next: NextFunction) => {
-  const { typeName } = req.body;
-  if (typeName == null) {
-    res.status(400).json(ResponseDTO("Type name is empty!", null, false));
-    return;
+  try {
+    const { typeName } = req.body;
+    if (typeName == null) {
+      badRequest(res, "Type name is empty!");
+      return
+    }
+    await FishTypeService.create(typeName);
+    created(res, "Create success!");
+  } catch (e) {
+    next(e);
   }
-  await FishTypeService.create(typeName);
-  res.status(201).json(ResponseDTO("Create success!"));
 };
 
 export const getAllFishTypes = async (req: Request, res: Response, next: NextFunction) => {
-  const types = await FishTypeService.getAll();
-  res.status(200).json(ResponseDTO("Get all type success!", types));
+  try {
+    const types = await FishTypeService.getAll();
+    ok(res, "Get all type success!", types);
+  } catch (e) {
+    next(e);
+  }
 };
