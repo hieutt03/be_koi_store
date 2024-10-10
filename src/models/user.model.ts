@@ -1,6 +1,7 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../config/db";
 import { Role } from "../contants/enums";
+import { UUID } from "sequelize";
 
 interface UserAttributes {
   userId: number;

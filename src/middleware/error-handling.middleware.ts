@@ -1,16 +1,27 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import ApiError from "../helpers/errors/api-error";
 
+import RequestValidationException, { ValidationErrors } from "../helpers/errors/request-validation.exception";
+import ApiError from "../helpers/api-error";
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const errorHandlingMiddleware = (err: ApiError, req: Request, res: Response, next: NextFunction) => {
-  console.error("Error caught by middleware:", err);
+  if (!err?.statusCode) err.statusCode = StatusCodes.INTERNAL_SERVER_ERROR;
 
-  if (!err.statusCode) err.statusCode = StatusCodes.INTERNAL_SERVER_ERROR;
+  console.log(err.data);
 
-  res.status(err.statusCode).json({
+  const responseError = err.data || {
+    // stack: err.stack
     statusCode: err.statusCode,
-    message: err.message || "Internal Server Error",
-  });
+    message: err.message || StatusCodes[err.statusCode],
+    errors: undefined as ValidationErrors | undefined,
+  };
+
+  if (err instanceof RequestValidationException) {
+    responseError.errors = err.errors;
+  }
+
+  res.status(err.statusCode).json(responseError);
 };
 
 export default errorHandlingMiddleware;
