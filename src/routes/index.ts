@@ -5,15 +5,17 @@ import orderSaleRoute from "./order-sale.route";
 import documentRoute from "./document.route";
 import voucherRoute from "./voucher.route";
 import packageRoute from "./package.route";
+import fishTypeRoute from "./fish-type.route";
 
 const mainRoutes: Router = Router();
 
-mainRoutes.use("/user", userRoutes);
+mainRoutes.use("/users", userRoutes);
 mainRoutes.use("/fishes", fishRoute);
-mainRoutes.use("/order-sale", orderSaleRoute);
+mainRoutes.use("/fish-types", fishTypeRoute);
+mainRoutes.use("/order-sales", orderSaleRoute);
 
-mainRoutes.use("/document", documentRoute);
-mainRoutes.use("/voucher", voucherRoute);
-mainRoutes.use("/package", packageRoute);
+mainRoutes.use("/documents", documentRoute);
+mainRoutes.use("/vouchers", voucherRoute);
+mainRoutes.use("/packages", packageRoute);
 
 export default mainRoutes;
