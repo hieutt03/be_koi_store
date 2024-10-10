@@ -31,11 +31,11 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-// app.all("*", () => {
-//   throw new NotFoundException();
-// });
+app.all("*", () => {
+  throw new NotFoundException();
+});
 
-// app.use(errorHandlingMiddleware);
+app.use(errorHandlingMiddleware);
 
 (async () => {
   try {
