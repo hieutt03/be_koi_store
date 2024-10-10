@@ -11,20 +11,21 @@ const sequelize = new Sequelize(
   }
 );
 
+const sequelizeWithDB = new Sequelize(
+  dotenv.DB_NAME,
+  dotenv.DB_USER,
+  dotenv.DB_PASSWORD,
+  {
+    host: process.env.DB_HOST,
+    dialect: "mysql"
+  }
+);
 (async () => {
   try {
     await sequelize.query(`CREATE DATABASE IF NOT EXISTS \`${dotenv.DB_NAME}\`;`);
     console.log(`Database '${dotenv.DB_NAME}' created.`);
     await sequelize.close();
-    const sequelizeWithDB = new Sequelize(
-      dotenv.DB_NAME,
-      dotenv.DB_USER,
-      dotenv.DB_PASSWORD,
-      {
-        host: process.env.DB_HOST,
-        dialect: "mysql"
-      }
-    );
+    
     
     
     await sequelizeWithDB.authenticate();
@@ -38,4 +39,4 @@ const sequelize = new Sequelize(
     console.error('Connect database failed:', error);
   }
 })();
-export default sequelize
+export default sequelizeWithDB
