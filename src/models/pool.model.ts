@@ -1,6 +1,6 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../config/db";
-import { PoolType } from "../contants/enums";
+import { PoolStatus, PoolType } from "../contants/enums";
 import FishType from "./fishType.model";
 
 interface PoolAttributes {
@@ -14,6 +14,7 @@ interface PoolAttributes {
   remainQuantity: number;
   speciesFish: number;
   soldQuantity: number;
+  status: PoolStatus;
 }
 
 export interface PoolCreationAttributes extends Optional<PoolAttributes, "poolId"> {
@@ -30,6 +31,7 @@ class Pool extends Model<PoolAttributes, PoolCreationAttributes> implements Pool
   public soldQuantity!: number;
   public maxQuantity!: number;
   public code!: string;
+  public status!: PoolStatus;
 }
 
 Pool.init(
@@ -78,6 +80,10 @@ Pool.init(
     code: {
       type: DataTypes.STRING(128),
       allowNull: false
+    },
+    status: {
+      type: DataTypes.ENUM(...Object.values(PoolStatus)),
+      defaultValue: PoolStatus.Active
     }
   },
   {
