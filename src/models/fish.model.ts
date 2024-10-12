@@ -24,7 +24,6 @@ interface FishAttributes {
   screeningRate: number;
   unique: boolean;
   packageId: number;
-  ownerId: number;
   poolId: number;
 }
 
@@ -40,7 +39,6 @@ class Fish extends Model<FishAttributes, FishCreationAttributes> implements Fish
   public foodIntake!: string;
   public image!: string;
   public origin!: string;
-  public ownerId!: number;
   public packageId!: number;
   public poolId!: number;
   public price!: number;
@@ -116,14 +114,6 @@ Fish.init(
     weight: {
       type: DataTypes.FLOAT,
       allowNull: true
-    },
-    ownerId: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: true,
-      references: {
-        model: User,
-        key: "userId"
-      }
     },
     packageId: {
       type: DataTypes.INTEGER.UNSIGNED,
