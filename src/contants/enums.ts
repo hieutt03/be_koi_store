@@ -21,3 +21,8 @@ export enum PoolType {
   General = "general",
   Specific = "specific",
 }
+export enum PoolStatus{
+  Pending = "pending",
+  Active = "active",
+  Inactive = "inactive",
+}
