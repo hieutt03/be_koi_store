@@ -12,9 +12,10 @@ interface OrderEsignDetailAttributes {
   packageId: number
   status: FishStatus
   orderEsignId: number
+  quantity: number
 }
 
-export interface OrderEsignDetailCreationAttributes extends Optional<OrderEsignDetailAttributes, "orderEsignDetailId"> {
+export interface OrderEsignDetailCreationAttributes extends Optional<OrderEsignDetailAttributes, "orderEsignDetailId" | "packageId" | "fishId"> {
 
 }
 
@@ -24,6 +25,7 @@ class OrderEsignDetail extends Model<OrderEsignDetailAttributes, OrderEsignDetai
   public packageId!: number;
   public status!: FishStatus;
   public orderEsignId!: number;
+  public quantity!: number;
 }
 
 OrderEsignDetail.init({
@@ -59,6 +61,10 @@ OrderEsignDetail.init({
       model: OrderEsign,
       key: "orderEsignId"
     }
+  }
+  , quantity: {
+    type: DataTypes.INTEGER,
+    allowNull: false
   }
 }, {
   sequelize, tableName: "order-esign-details"

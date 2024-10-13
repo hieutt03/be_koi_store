@@ -6,6 +6,7 @@ export class FishTypeService {
       return await FishType.create({ typeFishName });
     } catch (e) {
       throw "Something went wrong";
+ 
     }
   }
 
@@ -14,8 +15,8 @@ export class FishTypeService {
       return await FishType.findAll({
         order: [["createdAt", "DESC"]],
       });
-    } catch (e) {
-      throw "Something went wrong";
+    } catch (e: any) {
+      throw Error(e.message || "Something went wrong.");
     }
   }
 }

@@ -8,6 +8,7 @@ import packageRoute from "./package.route";
 import fishTypeRoute from "./fish-type.route";
 import authRoutes from "./auth.route";
 import poolRoute from "./pool.route";
+import orderEsignRoute from "./order-esign.route";
 
 const mainRoutes: Router = Router();
 
@@ -16,6 +17,7 @@ mainRoutes.use("/users", userRoutes);
 mainRoutes.use("/fishes", fishRoute);
 mainRoutes.use("/fish-types", fishTypeRoute);
 mainRoutes.use("/order-sales", orderSaleRoute);
+mainRoutes.use("/order-esigns", orderEsignRoute);
 
 mainRoutes.use("/documents", documentRoute);
 mainRoutes.use("/vouchers", voucherRoute);
