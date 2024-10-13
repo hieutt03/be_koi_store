@@ -2,7 +2,7 @@ export enum Status {
   Sold = "sold",
   Active = "active",
   Inactive = "inactive",
-  Consign = "consign",
+  Esign = "esign",
 }
 
 export enum Role {
@@ -21,8 +21,8 @@ export enum PoolType {
   General = "general",
   Specific = "specific",
 }
-export enum PoolStatus{
+export enum PoolStatus {
   Pending = "pending",
-  Active = "active",
+  Available = "available",
   Inactive = "inactive",
 }

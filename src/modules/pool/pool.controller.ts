@@ -6,7 +6,13 @@ import { PoolService } from "./pool.service";
 export const createPool = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = req.body as PoolCreationAttributes;
-    if (data.name == null || data.code == null || data.type == null || data.description == null || data.speciesFish == null) {
+    if (
+      data.name == null ||
+      data.code == null ||
+      data.type == null ||
+      data.description == null ||
+      data.origin == null
+    ) {
       badRequest(res, "Please enter all required fields!");
       return;
     }
@@ -15,7 +21,6 @@ export const createPool = async (req: Request, res: Response, next: NextFunction
   } catch (error) {
     next(error);
   }
-  
 };
 
 export const getAllPools = async (req: Request, res: Response, next: NextFunction) => {
@@ -25,13 +30,12 @@ export const getAllPools = async (req: Request, res: Response, next: NextFunctio
   } catch (error) {
     next(error);
   }
-  
 };
 export const updatePool = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const poolId = req.params.poolId;
     const poolData = req.body;
-    
+
     const currentPool = await PoolService.getPoolById(poolId);
     if (!currentPool) {
       badRequest(res, "Not found current pool");
@@ -39,7 +43,7 @@ export const updatePool = async (req: Request, res: Response, next: NextFunction
     }
     const updateData: PoolCreationAttributes = {
       ...currentPool,
-      ...poolData
+      ...poolData,
     };
     const isSuccess = await PoolService.update(poolId, updateData);
     if (!isSuccess) {

@@ -1,16 +1,14 @@
 import { DataTypes, Model, Optional } from "sequelize";
-import Fish from "./fish.model";
-import Package from "./package.model";
-import OrderSale from "./order-sale.model";
 import sequelize from "../config/db";
-import User from "./user.model";
+import Fish from "./fish.model";
+import OrderSale from "./order-sale.model";
+import Package from "./package.model";
 
 interface OrderSaleDetailAttributes {
   orderSaleDetailId: number;
   orderSaleId: number;
   quantity: number;
   fishId: number;
-  packageId: number;
 }
 
 interface OrderSaleDetailCreationAttributes extends Optional<OrderSaleDetailAttributes, "orderSaleDetailId"> {}
@@ -23,7 +21,6 @@ class OrderSaleDetail
   public orderSaleId!: number;
   public quantity!: number;
   public fishId!: number;
-  public packageId!: number;
 }
 
 OrderSaleDetail.init(
@@ -45,14 +42,7 @@ OrderSaleDetail.init(
         key: "fishId",
       },
     },
-    packageId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: Package,
-        key: "packageId",
-      },
-    },
+
     orderSaleId: {
       type: DataTypes.INTEGER,
       allowNull: false,
