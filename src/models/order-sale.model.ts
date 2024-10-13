@@ -6,24 +6,19 @@ interface OrderSaleAttributes {
   orderSaleId: number;
   paid: boolean;
   totalPrice: number;
-  quantity: number;
   voucherCode: string;
   buyerId: number;
-  orderAt: Date;
-  staffId: number;
 }
 
-interface OrderSaleCreateAttributes extends Optional<OrderSaleAttributes, "orderSaleId"> {}
+export interface OrderSaleCreateAttributes
+  extends Optional<OrderSaleAttributes, "orderSaleId" | "voucherCode" | "totalPrice"> {}
 
 class OrderSale extends Model<OrderSaleAttributes, OrderSaleCreateAttributes> implements OrderSaleAttributes {
   public orderSaleId!: number;
   public paid!: boolean;
-  public quantity!: number;
   public totalPrice!: number;
   public voucherCode!: string;
   public buyerId!: number;
-  public orderAt!: Date;
-  public staffId!: number;
 }
 
 OrderSale.init(
@@ -36,11 +31,7 @@ OrderSale.init(
     paid: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      defaultValue: false,
-    },
-    quantity: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
+      defaultValue: true,
     },
     totalPrice: {
       type: DataTypes.FLOAT,
@@ -58,19 +49,6 @@ OrderSale.init(
         key: "userId",
       },
     },
-    orderAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: new Date(),
-    },
-    staffId: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: false,
-      references: {
-        model: User,
-        key: "userId",
-      },
-    },
   },
   {
     tableName: "order-sales",
@@ -79,11 +57,7 @@ OrderSale.init(
 );
 
 OrderSale.belongsTo(User, { foreignKey: "buyerId" });
-OrderSale.belongsTo(User, { foreignKey: "staffId" });
 User.hasMany(OrderSale, {
   foreignKey: "buyerId",
-});
-User.hasMany(OrderSale, {
-  foreignKey: "staffId",
 });
 export default OrderSale;

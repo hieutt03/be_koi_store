@@ -1,6 +1,7 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../config/db";
-import { PoolType } from "../contants/enums";
+import { PoolStatus, PoolType } from "../contants/enums";
+import OriginFish from "./origin-fish.model";
 
 interface PoolAttributes {
   poolId: number;
@@ -11,11 +12,12 @@ interface PoolAttributes {
   type: PoolType;
   initQuantity: number;
   remainQuantity: number;
-  speciesFish: string;
+  origin: number;
   soldQuantity: number;
+  status: PoolStatus;
 }
 
-interface PoolCreationAttributes extends Optional<PoolAttributes, "poolId"> {}
+export interface PoolCreationAttributes extends Optional<PoolAttributes, "poolId"> {}
 
 class Pool extends Model<PoolAttributes, PoolCreationAttributes> implements PoolAttributes {
   public poolId!: number;
@@ -24,10 +26,11 @@ class Pool extends Model<PoolAttributes, PoolCreationAttributes> implements Pool
   public type!: PoolType;
   public initQuantity!: number;
   public remainQuantity!: number;
-  public speciesFish!: string;
+  public origin!: number;
   public soldQuantity!: number;
   public maxQuantity!: number;
   public code!: string;
+  public status!: PoolStatus;
 }
 
 Pool.init(
@@ -57,9 +60,13 @@ Pool.init(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    speciesFish: {
-      type: DataTypes.STRING(128),
+    origin: {
+      type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
+      references: {
+        model: OriginFish,
+        key: "originFishId",
+      },
     },
     soldQuantity: {
       type: DataTypes.INTEGER,
@@ -73,11 +80,18 @@ Pool.init(
       type: DataTypes.STRING(128),
       allowNull: false,
     },
+    status: {
+      type: DataTypes.ENUM(...Object.values(PoolStatus)),
+      defaultValue: PoolStatus.Available,
+    },
   },
   {
     tableName: "pools",
     sequelize,
   }
 );
+
+OriginFish.hasMany(Pool, { foreignKey: "origin" });
+Pool.belongsTo(OriginFish, { foreignKey: "origin" });
 
 export default Pool;

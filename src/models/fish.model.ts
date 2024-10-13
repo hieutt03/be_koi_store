@@ -1,8 +1,9 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../config/db";
-import User from "./user.model";
-import Pool from "./pool.model";
 import { Status, Type } from "../contants/enums";
+import OriginFish from "./origin-fish.model";
+import Pool from "./pool.model";
+import User from "./user.model";
 
 interface FishAttributes {
   fishId: number;
@@ -14,20 +15,18 @@ interface FishAttributes {
   price: number;
   type: Type;
   sex: boolean;
-  origin: string;
+  origin: number;
   age: number;
   weight: number;
-  species: string;
   character: string;
   foodIntake: string;
   screeningRate: number;
   unique: boolean;
   packageId: number;
-  ownerId: number;
   poolId: number;
 }
 
-interface FishCreationAttributes extends Optional<FishAttributes, "fishId"> {}
+export interface FishCreationAttributes extends Optional<FishAttributes, "fishId"> {}
 
 class Fish extends Model<FishAttributes, FishCreationAttributes> implements FishAttributes {
   public fishId!: number;
@@ -37,14 +36,12 @@ class Fish extends Model<FishAttributes, FishCreationAttributes> implements Fish
   public features!: string;
   public foodIntake!: string;
   public image!: string;
-  public origin!: string;
-  public ownerId!: number;
+  public origin!: number;
   public packageId!: number;
   public poolId!: number;
   public price!: number;
   public screeningRate!: number;
   public sex!: boolean;
-  public species!: string;
   public status!: Status;
   public tag!: string;
   public type!: Type;
@@ -92,15 +89,15 @@ Fish.init(
       defaultValue: true,
     },
     origin: {
-      type: DataTypes.STRING(128),
+      type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
+      references: {
+        model: OriginFish,
+        key: "originFishId",
+      },
     },
     age: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    species: {
-      type: DataTypes.STRING(128),
       allowNull: false,
     },
     screeningRate: {
@@ -111,18 +108,11 @@ Fish.init(
       type: DataTypes.FLOAT,
       allowNull: true,
     },
-    ownerId: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: false,
-      references: {
-        model: User,
-        key: "userId",
-      },
-    },
     packageId: {
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: true,
     },
+
     poolId: {
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
@@ -149,11 +139,13 @@ Fish.init(
     sequelize,
   }
 );
-
 Fish.belongsTo(User, { foreignKey: "ownerId" });
 User.hasMany(Fish, { foreignKey: "ownerId" });
 Fish.belongsTo(Pool, { foreignKey: "poolId" });
 Pool.hasMany(Fish, {
   foreignKey: "poolId",
 });
+OriginFish.hasMany(Fish, { foreignKey: "origin" });
+Fish.belongsTo(OriginFish, { foreignKey: "origin" });
+
 export default Fish;
