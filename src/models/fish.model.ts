@@ -1,10 +1,9 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import sequelize from "../config/db";
-import User from "./user.model";
-import Pool from "./pool.model";
 import { Status, Type } from "../contants/enums";
-import FishType from "./type-fish.model";
 import OriginFish from "./origin-fish.model";
+import Pool from "./pool.model";
+import User from "./user.model";
 
 interface FishAttributes {
   fishId: number;
@@ -37,7 +36,7 @@ class Fish extends Model<FishAttributes, FishCreationAttributes> implements Fish
   public features!: string;
   public foodIntake!: string;
   public image!: string;
-  public origin!: string;
+  public origin!: number;
   public packageId!: number;
   public poolId!: number;
   public price!: number;
@@ -111,7 +110,7 @@ Fish.init(
     },
     packageId: {
       type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: true
+      allowNull: true,
     },
 
     poolId: {
