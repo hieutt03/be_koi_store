@@ -4,8 +4,8 @@ export class FishTypeService {
   static async create(typeName: string): Promise<FishType> {
     try {
       return await FishType.create({ fishTypeName: typeName });
-    } catch (e) {
-      throw "Something went wrong";
+    } catch (e: any) {
+      throw Error(e.message || "Something went wrong.");
     }
   }
   
@@ -16,8 +16,8 @@ export class FishTypeService {
           ["createdAt", "DESC"]
         ]
       });
-    } catch (e) {
-      throw "Something went wrong";
+    } catch (e: any) {
+      throw Error(e.message || "Something went wrong.");
     }
     
   }

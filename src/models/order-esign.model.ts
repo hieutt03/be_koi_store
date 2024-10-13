@@ -13,7 +13,7 @@ interface OrderEsignAttributes {
   expiryDate: Date;
 }
 
-export interface OrderEsignCreationAttributes extends Optional<OrderEsignAttributes, "orderEsignId"> {
+export interface OrderEsignCreationAttributes extends Optional<OrderEsignAttributes, "orderEsignId" | "totalPrice"| "staffId"> {
 }
 
 class OrderEsign extends Model<OrderEsignAttributes, OrderEsignCreationAttributes> implements OrderEsignAttributes {
@@ -25,7 +25,6 @@ class OrderEsign extends Model<OrderEsignAttributes, OrderEsignCreationAttribute
   public receiveDate!: Date;
   public expiryDate!: Date;
 }
-
 OrderEsign.init({
   orderEsignId: {
     type: DataTypes.INTEGER.UNSIGNED,
@@ -38,11 +37,11 @@ OrderEsign.init({
   },
   totalPrice: {
     type: DataTypes.FLOAT,
-    allowNull: false
+    allowNull: true
   },
   staffId: {
     type: DataTypes.INTEGER.UNSIGNED,
-    allowNull: false,
+    allowNull: true,
     references: {
       model: User,
       key: "userId"

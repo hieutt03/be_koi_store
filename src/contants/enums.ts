@@ -29,7 +29,7 @@ export enum PoolStatus {
 }
 
 export enum EsignStatus {
-  Done = "Paid",
+  Done = "paid",
   Pending = "pending",
 }
 
