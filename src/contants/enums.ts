@@ -21,8 +21,19 @@ export enum PoolType {
   General = "general",
   Specific = "specific",
 }
+
 export enum PoolStatus {
   Pending = "pending",
   Available = "available",
   Inactive = "inactive",
+}
+
+export enum EsignStatus {
+  Done = "paid",
+  Pending = "pending",
+}
+
+export enum FishStatus {
+  Healthy = "healthy",
+  Sick = "sick"
 }
