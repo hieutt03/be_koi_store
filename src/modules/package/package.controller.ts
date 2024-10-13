@@ -4,7 +4,6 @@ import { PackageService } from "./package.service";
 import { PackageCreationAttributes } from "../../models/package.model";
 import { badRequest, internalServerError, ok } from "../../utils/util";
 
-
 export const getAllPackages = async (req: Request, res: Response, next: NextFunction) => {
   const allPackages = await PackageService.getAllPackages();
   res.status(200).json(ResponseDTO("Get all Packages", allPackages));
@@ -12,7 +11,7 @@ export const getAllPackages = async (req: Request, res: Response, next: NextFunc
 export const createPackage = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = req.body as PackageCreationAttributes;
-    if (!data.name || !data.ownerId || !data.soldAt || !data.quantity) {
+    if (!data.name || !data.ownerId || !data.quantity) {
       badRequest(res, "Enter all required fields");
       return;
     }
@@ -33,9 +32,9 @@ export const updatePackage = async (req: Request, res: Response, next: NextFunct
     const data = req.body as PackageCreationAttributes;
     const updateData: PackageCreationAttributes = {
       ...currentPackage,
-      ...data
+      ...data,
     };
-    
+
     const isSuccess = await PackageService.update(packageId, updateData);
     if (!isSuccess) {
       internalServerError(res, "Update failed");

@@ -6,7 +6,7 @@ export const ok = (res: Response, message: string = "", data: unknown = undefine
 };
 
 export const created = (res: Response, message: string = "", data: unknown = undefined) => {
-  return res.status(StatusCodes.CREATED).json(data);
+  return res.status(StatusCodes.CREATED).json({ message, data });
 };
 
 export const noContent = (res: Response, message: string = "") => {
