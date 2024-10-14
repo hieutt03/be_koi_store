@@ -1,26 +1,70 @@
-import sequelize from "sequelize";
-import BadRequestException from "../../helpers/errors/bad-request.exception";
-import OrderSale, { OrderSaleCreateAttributes } from "../../models/order-sale.model";
-import User from "../../models/user.model";
+import OrderSale, {OrderSaleCreateAttributes, OrderSaleFullAttributes} from "../../models/order-sale.model";
+import OrderSaleDetail, {OrderSaleDetailCreationAttributes} from "../../models/order-sale-detail.model";
+import {or, Transaction} from "sequelize";
 
 export class OrderSaleService {
-  static async getAllOrderSales() {
-    return OrderSale.findAll();
-  }
+    static async getAllOrderSales(): Promise<OrderSale[]> {
+        try {
+            return OrderSale.findAll();
+        } catch (e: any) {
+            throw Error(e.message || "Something went wrong.");
+        }
 
-  static async createOrderSale(orderSale: any) {
-    const { buyerId, staffId } = orderSale;
-
-    const existingBuyer = await User.findOne({ where: { userId: buyerId } });
-    if (!existingBuyer) {
-      throw new BadRequestException("Buyer not found");
     }
 
-    const existingStaff = await User.findOne({ where: { userId: staffId } });
-    if (!existingStaff) {
-      throw new BadRequestException("Staff not found");
+    static async createOrderSale(data: OrderSaleCreateAttributes, transaction: Transaction) {
+        try {
+            return OrderSale.create(data, {transaction});
+        } catch (e: any) {
+            throw Error(e.message || "Something went wrong.");
+        }
+
     }
 
-    // return OrderSale.create({ orderSaleId, paid, quantity, totalPrice, voucherCode, buyerId, staffId });
-  }
+    static async createSaleDetail(data: OrderSaleDetailCreationAttributes, transaction: Transaction): Promise<OrderSaleDetail> {
+
+        try {
+            return await OrderSaleDetail.create(data, {transaction});
+        } catch (e: any) {
+            throw Error(e.message || "Something went wrong.");
+        }
+    }
+
+    static async getAllOrderSalesByBuyer(buyerId: number): Promise<OrderSaleFullAttributes[]> {
+        try {
+            return await OrderSale.findAll({
+                where: {buyerId},
+                include: [
+                    {
+                        model: OrderSaleDetail,
+                        as: "orderDetails",
+                        required: true
+                    }
+                ]
+            });
+
+        } catch (e: any) {
+            throw Error(e.message || "Something went wrong.");
+        }
+
+    }
+
+    static async getAllOrderSalesByOrderId(buyerId: number, orderSaleId: number): Promise<OrderSaleFullAttributes[]> {
+        try {
+            return await OrderSale.findAll({
+                where: {buyerId, orderSaleId},
+                include: [
+                    {
+                        model: OrderSaleDetail,
+                        as: "orderDetails",
+                        required: true
+                    }
+                ]
+            });
+
+        } catch (e: any) {
+            throw Error(e.message || "Something went wrong.");
+        }
+
+    }
 }

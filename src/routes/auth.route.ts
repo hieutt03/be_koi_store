@@ -5,5 +5,4 @@ const authRoutes: Router = Router();
 
 authRoutes.post("/register-user", registerUser);
 authRoutes.post("/login-user", loginUser);
-
 export default authRoutes;

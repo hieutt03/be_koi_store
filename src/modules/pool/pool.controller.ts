@@ -16,6 +16,12 @@ export const createPool = async (req: Request, res: Response, next: NextFunction
       badRequest(res, "Please enter all required fields!");
       return;
     }
+
+    const existingPool = await PoolService.getPoolByCode( data.code);
+    if (existingPool) {
+      badRequest(res,"Code is existed")
+      return
+    }
     const pool = await PoolService.create(data);
     created(res, "Create OK!", pool);
   } catch (error) {
@@ -36,7 +42,7 @@ export const updatePool = async (req: Request, res: Response, next: NextFunction
     const poolId = req.params.poolId;
     const poolData = req.body;
 
-    const currentPool = await PoolService.getPoolById(poolId);
+    const currentPool = await PoolService.getPoolById(Number(poolId));
     if (!currentPool) {
       badRequest(res, "Not found current pool");
       return;
@@ -45,7 +51,7 @@ export const updatePool = async (req: Request, res: Response, next: NextFunction
       ...currentPool,
       ...poolData,
     };
-    const isSuccess = await PoolService.update(poolId, updateData);
+    const isSuccess = await PoolService.update(Number(poolId), updateData);
     if (!isSuccess) {
       internalServerError(res, "Update pool failed");
       return;
@@ -58,12 +64,12 @@ export const updatePool = async (req: Request, res: Response, next: NextFunction
 export const deletePool = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const poolId = req.params.poolId;
-    const currentPool = await PoolService.getPoolById(poolId);
+    const currentPool = await PoolService.getPoolById(Number(poolId));
     if (!currentPool) {
       badRequest(res, "Not found current pool");
       return;
     }
-    const isSuccess = await PoolService.delete(poolId);
+    const isSuccess = await PoolService.delete(Number(poolId));
     if (!isSuccess) {
       internalServerError(res, "Delete pool failed");
       return;

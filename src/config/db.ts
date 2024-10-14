@@ -25,14 +25,11 @@ const sequelizeWithDB = new Sequelize(
     await sequelize.query(`CREATE DATABASE IF NOT EXISTS \`${dotenv.DB_NAME}\`;`);
     console.log(`Database '${dotenv.DB_NAME}' created.`);
     await sequelize.close();
-    
-    
-    
+
     await sequelizeWithDB.authenticate();
     console.log('Connect database success.');
     
-    
-    await sequelizeWithDB.sync();
+    await sequelizeWithDB.sync({ force: false});
     console.log('Table in database async success.');
     
   } catch (error) {

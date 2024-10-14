@@ -1,11 +1,12 @@
-import { Request, Response, NextFunction } from "express";
-import { badRequest, created, ok } from "../../utils/util";
-import { OrderEsignService } from "./order-esign.service";
-import { EsignStatus, FishStatus } from "../../contants/enums";
+import {NextFunction, Request, Response} from "express";
+import {badRequest, created} from "../../utils/util";
+import {OrderEsignService} from "./order-esign.service";
+import {EsignStatus, FishStatus, OrderEsignDetailStatus} from "../../contants/enums";
 
 interface EsignDataDetail {
   id: number,
   status: FishStatus
+  quantity?: number
 }
 
 interface EsignData {
@@ -41,24 +42,28 @@ export const createOrderEsign = async (req: Request, res: Response, next: NextFu
     const packageData = infoData.package;
     
     if (fishData !== null) {
-      // for (let fish of fishData) {
-      //   await OrderEsignService.createEsignDetail({
-      //     fishId: fish.id,
-      //     status: fish.status,
-      //     orderEsignId: orderEsign.orderEsignId
-      //   });
-      // }
+      for (let fish of fishData) {
+        await OrderEsignService.createEsignDetail({
+          fishId: fish.id,
+          status: fish.status,
+          orderEsignId: orderEsign.orderEsignId,
+          orderStatus: OrderEsignDetailStatus.Pending,
+          quantity: 1
+        });
+      }
     }
-    
-    // if (packageData !== null) {
-    //   for (let container of packageData) {
-    //     await OrderEsignService.createEsignDetail({
-    //       packageId: container.id,
-    //       status: container.status,
-    //       orderEsignId: orderEsign.orderEsignId
-    //     });
-    //   }
-    // }
+
+    if (packageData !== null) {
+      for (let container of packageData) {
+        await OrderEsignService.createEsignDetail({
+          packageId: container.id,
+          status: container.status,
+          orderEsignId: orderEsign.orderEsignId,
+          orderStatus: OrderEsignDetailStatus.Pending,
+          quantity: container.quantity ?? 1
+        });
+      }
+    }
     
     created(res, "Create order success!");
     

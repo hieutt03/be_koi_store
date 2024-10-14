@@ -1,97 +1,83 @@
-import { DataTypes, Model, Optional } from "sequelize";
+import {DataTypes, Model, Optional} from "sequelize";
 import sequelize from "../config/db";
-import { PoolStatus, PoolType } from "../contants/enums";
+import {PoolStatus, PoolType} from "../contants/enums";
 import OriginFish from "./origin-fish.model";
 
 interface PoolAttributes {
-  poolId: number;
-  maxQuantity: number;
-  code: string;
-  name: string;
-  description: string;
-  type: PoolType;
-  initQuantity: number;
-  remainQuantity: number;
-  origin: number;
-  soldQuantity: number;
-  status: PoolStatus;
+    poolId: number;
+    maxQuantity: number;
+    code: string;
+    name: string;
+    description: string;
+    type: PoolType;
+    origin: number;
+    status: PoolStatus;
 }
 
-export interface PoolCreationAttributes extends Optional<PoolAttributes, "poolId"> {}
+export interface PoolCreationAttributes extends Optional<PoolAttributes, "poolId"> {
+}
 
 class Pool extends Model<PoolAttributes, PoolCreationAttributes> implements PoolAttributes {
-  public poolId!: number;
-  public name!: string;
-  public description!: string;
-  public type!: PoolType;
-  public initQuantity!: number;
-  public remainQuantity!: number;
-  public origin!: number;
-  public soldQuantity!: number;
-  public maxQuantity!: number;
-  public code!: string;
-  public status!: PoolStatus;
+    public poolId!: number;
+    public name!: string;
+    public description!: string;
+    public type!: PoolType;
+    public origin!: number;
+    public maxQuantity!: number;
+    public code!: string;
+    public status!: PoolStatus;
 }
 
 Pool.init(
-  {
-    poolId: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      autoIncrement: true,
-      primaryKey: true,
+    {
+        poolId: {
+            type: DataTypes.INTEGER.UNSIGNED,
+            autoIncrement: true,
+            primaryKey: true,
+        },
+        name: {
+            type: DataTypes.STRING(128),
+            allowNull: false,
+        },
+        description: {
+            type: DataTypes.STRING(500),
+            allowNull: true,
+        },
+        type: {
+            type: DataTypes.ENUM(...Object.values(PoolType)),
+            allowNull: false,
+        },
+
+        origin: {
+            type: DataTypes.INTEGER.UNSIGNED,
+            allowNull: false,
+            references: {
+                model: OriginFish,
+                key: "originFishId",
+            },
+        },
+
+        maxQuantity: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        code: {
+            type: DataTypes.STRING(128),
+            allowNull: false,
+            unique:true
+        },
+        status: {
+            type: DataTypes.ENUM(...Object.values(PoolStatus)),
+            defaultValue: PoolStatus.Available,
+        },
     },
-    name: {
-      type: DataTypes.STRING(128),
-      allowNull: false,
-    },
-    description: {
-      type: DataTypes.STRING(500),
-      allowNull: true,
-    },
-    type: {
-      type: DataTypes.ENUM(...Object.values(PoolType)),
-      allowNull: false,
-    },
-    initQuantity: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    remainQuantity: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    origin: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: false,
-      references: {
-        model: OriginFish,
-        key: "originFishId",
-      },
-    },
-    soldQuantity: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    maxQuantity: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    code: {
-      type: DataTypes.STRING(128),
-      allowNull: false,
-    },
-    status: {
-      type: DataTypes.ENUM(...Object.values(PoolStatus)),
-      defaultValue: PoolStatus.Available,
-    },
-  },
-  {
-    tableName: "pools",
-    sequelize,
-  }
+    {
+        tableName: "pools",
+        sequelize,
+    }
 );
 
-OriginFish.hasMany(Pool, { foreignKey: "origin" });
-Pool.belongsTo(OriginFish, { foreignKey: "origin" });
+OriginFish.hasMany(Pool, {foreignKey: "origin"});
+Pool.belongsTo(OriginFish, {foreignKey: "origin"});
 
 export default Pool;
