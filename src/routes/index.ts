@@ -9,6 +9,7 @@ import fishTypeRoute from "./fish-type.route";
 import authRoutes from "./auth.route";
 import poolRoute from "./pool.route";
 import orderEsignRoute from "./order-esign.route";
+import originFishRoute from "./origin-fish.route";
 
 const mainRoutes: Router = Router();
 
@@ -16,6 +17,7 @@ mainRoutes.use("/auth", authRoutes);
 mainRoutes.use("/users", userRoutes);
 mainRoutes.use("/fishes", fishRoute);
 mainRoutes.use("/fish-types", fishTypeRoute);
+mainRoutes.use("/origins", originFishRoute);
 mainRoutes.use("/order-sales", orderSaleRoute);
 mainRoutes.use("/order-esigns", orderEsignRoute);
 

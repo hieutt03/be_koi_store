@@ -4,7 +4,7 @@ import { badRequest, created, ok } from "../../utils/util";
 
 export const autoCreateFishType = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const types = ["Koi Nhật Bản", "Koi Tây Ban Nha", "Koi Hàn Quốc"];
+    const types = ["Purely imported", "F1 hybrid", "Pure Vietnamese"];
     for (const type of types) {
       await FishTypeService.create(type);
     }

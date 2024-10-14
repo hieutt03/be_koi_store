@@ -1,32 +1,22 @@
 export type CreateOrderSaleRequest = {
-  buyerId: number;
-  voucherCode: string;
-  fishesOrder: {
-    uniqueFishes: [
-      {
-        fishId: number; // A
-        quantity: 1;
-      },
-      {
-        fishId: number; // B
-        quantity: 1;
-      },
-      {
-        fishId: number; // C
-        quantity: 1;
-      }
-    ];
-    packageFishes: [
-      {
-        fishId: number; // E
-        quantity: number; // 12
-      },
-      {
-        fishId: number; // F
-        quantity: number; // 8
-      }
-    ];
-  };
+    buyerId: number;
+    voucherCode: string;
+    fishesOrder: {
+        uniqueFishes: [
+            {
+                id: number; // A
+                quantity: number;
+            },
+
+        ];
+        packageFishes: [
+            {
+                id: number; // E
+                quantity: number; // 12
+            },
+
+        ];
+    };
 };
 
 /**
