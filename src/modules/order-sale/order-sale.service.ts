@@ -1,6 +1,7 @@
 import OrderSale, {OrderSaleCreateAttributes, OrderSaleFullAttributes} from "../../models/order-sale.model";
 import OrderSaleDetail, {OrderSaleDetailCreationAttributes} from "../../models/order-sale-detail.model";
 import {or, Transaction} from "sequelize";
+import {OrderStatus} from "../../contants/enums";
 
 export class OrderSaleService {
     static async getAllOrderSales(): Promise<OrderSale[]> {
@@ -66,5 +67,72 @@ export class OrderSaleService {
             throw Error(e.message || "Something went wrong.");
         }
 
+    }
+
+    static async updateStatusForTotalOrderDetail(orderSaleId: number, status: OrderStatus, transaction: Transaction) {
+        try {
+            console.log(orderSaleId, status)
+            const [updateRows] = await OrderSaleDetail.update({
+                status
+            }, {
+                where: {
+                    orderSaleId
+                }, transaction
+            });
+            return updateRows > 0;
+
+        } catch (e: any) {
+            new Error(e.message || "Something went wrong.");
+        }
+    }
+
+    static async updateStatusForOrderSale(orderSaleId: number, status: OrderStatus, transaction: Transaction) {
+        try {
+            const [updateRows] = await OrderSale.update({
+                status
+            }, {
+                where: {
+                    orderSaleId
+                }, transaction
+            });
+            return updateRows > 0;
+
+        } catch (e: any) {
+            new Error(e.message || "Something went wrong.");
+        }
+    }
+
+    static async updateStatusForOnlyOrderDetail(orderSaleDetailId: number, orderSaleId: number, status: OrderStatus, transaction?: Transaction) {
+        try {
+            const [updateRows] = await OrderSaleDetail.update({
+                status
+            }, {
+                where: {
+                    orderSaleDetailId
+                },
+                transaction
+            });
+
+            const orderDetails = await OrderSaleDetail.findAll({
+                where: {orderSaleId},
+                attributes: ['status', 'orderSaleId']
+            })
+
+            const isSameStatus = orderDetails.every(o => o.status === status)
+
+            if (isSameStatus) {
+                await OrderSale.update(
+                    {status},
+                    {
+                        where: {orderSaleId},
+                        transaction
+                    }
+                );
+            }
+            return updateRows > 0;
+        } catch
+            (e: any) {
+            new Error(e.message || "Something went wrong.");
+        }
     }
 }

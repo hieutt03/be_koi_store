@@ -3,7 +3,7 @@ import {CreateOrderSaleRequest} from "../../dto/order-sale/order-sale.request";
 import {badRequest, created, ok} from "../../utils/util";
 import {OrderSaleService} from "./order-sale.service";
 import User from "../../models/user.model";
-import {FishOrderStatus, OrderStatus, Status} from "../../contants/enums";
+import {OrderStatus, Status} from "../../contants/enums";
 import {VoucherService} from "../voucher/voucher.service";
 import {OrderSaleCreateAttributes} from "../../models/order-sale.model";
 import {FishService} from "../fish/fish.service";
@@ -84,7 +84,7 @@ export const createOrderSale = async (req: AuthRequest, res: Response, next: Nex
 
                 await OrderSaleService.createSaleDetail({
                     quantity: 1,
-                    status: FishOrderStatus.Processing,
+                    status: OrderStatus.Processing,
                     fishId: fish.id,
                     initPrice: currentFish?.price ?? 0,
                     orderSaleId: newOrderSale.orderSaleId
@@ -130,7 +130,7 @@ export const createOrderSale = async (req: AuthRequest, res: Response, next: Nex
 
                 await OrderSaleService.createSaleDetail({
                     quantity: 1,
-                    status: FishOrderStatus.Processing,
+                    status: OrderStatus.Processing,
                     packageId: newPackage.packageId,
                     initPrice: currentFish?.price ?? 0,
                     orderSaleId: newOrderSale.orderSaleId
@@ -172,6 +172,51 @@ export const getOrderDetailByOrderId = async (req: AuthRequest, res: Response, n
 
 
     } catch (e) {
+        next(e);
+    }
+}
+
+export const updateTotalOrderSaleStatus = async (req: AuthRequest, res: Response, next: NextFunction) => {
+    const t = await sequelize.transaction()
+    try {
+        const {status} = req.body;
+        const orderSaleId = req.params.orderSaleId
+        if (!Object.values(OrderStatus).includes(status)) {
+            await t.rollback()
+            badRequest(res, `Status is wrong format.Accepted values are: ${Object.values(OrderStatus).join(', ')}.`);
+            return
+        }
+
+        await OrderSaleService.updateStatusForTotalOrderDetail(Number(orderSaleId), status, t);
+
+        await OrderSaleService.updateStatusForOrderSale(Number(orderSaleId), status, t)
+
+
+        await t.commit()
+        ok(res, "Update status success")
+
+    } catch (e) {
+        await t.rollback()
+        next(e);
+    }
+}
+
+export const updateStatusOrderDetail = async (req: AuthRequest, res: Response, next: NextFunction) => {
+    const t = await sequelize.transaction()
+    try {
+        const orderSaleDetailId = req.params.orderSaleDetailId
+        const {status, orderSaleId} = req.body;
+        if (!Object.values(OrderStatus).includes(status)) {
+            await t.rollback()
+            badRequest(res, `Status is wrong format.Accepted values are: ${Object.values(OrderStatus).join(', ')}.`);
+            return
+        }
+
+        await OrderSaleService.updateStatusForOnlyOrderDetail(Number(orderSaleDetailId), Number(orderSaleId), status)
+        await t.commit()
+        ok(res, "Update status success")
+    } catch (e) {
+        await t.rollback()
         next(e);
     }
 }

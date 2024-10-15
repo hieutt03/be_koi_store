@@ -5,40 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3caa785c-b9bf-422c-a408-2330ce2e755a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/dto/order-esign/order-esign.request.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/modules/origin-fish/origin-fish.controller.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/modules/origin-fish/origin-fish.service.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/routes/origin-fish.route.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/utils/discount-package.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/config/db.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/config/db.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/contants/enums.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/contants/enums.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dto/order-sale/order-sale.request.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/dto/order-sale/order-sale.request.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dto/order-esign/order-esign.request.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/dto/order-esign/order-esign.request.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/middleware/auth.middleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/middleware/auth.middleware.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/esign-info.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/esign-info.model.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/models/fish.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/fish.model.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/models/order-esign-detail.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/order-esign-detail.model.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/order-esign.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/order-esign.model.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/models/order-sale-detail.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/order-sale-detail.model.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/order-sale.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/order-sale.model.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/models/package.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/package.model.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/user.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/user.model.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/models/voucher.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/voucher.model.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/modules/fish-type/fish-type.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/modules/fish-type/fish-type.controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/modules/fish/fish.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/modules/fish/fish.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/models/pool.model.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/models/pool.model.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/modules/fish/fish.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/modules/fish/fish.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/modules/order-esign/order-esign.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/modules/order-esign/order-esign.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/modules/order-esign/order-esign.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/modules/order-esign/order-esign.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/modules/order-sale/order-sale.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/modules/order-sale/order-sale.controller.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/modules/order-sale/order-sale.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/modules/order-sale/order-sale.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/modules/package/package.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/modules/package/package.controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/modules/package/package.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/modules/package/package.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/modules/pool/pool.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/modules/pool/pool.controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/modules/pool/pool.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/modules/pool/pool.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/modules/voucher/voucher.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/modules/voucher/voucher.controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/modules/voucher/voucher.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/modules/voucher/voucher.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/auth.route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/auth.route.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routes/order-sale.route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/order-sale.route.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/voucher.route.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/voucher.route.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,6 +83,9 @@
   }
 }</component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\FALL2024\MMA\project" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="E:\FALL2024\MMA\project\src\models" />
     </key>
@@ -132,7 +119,9 @@
       <workItem from="1728838951440" duration="3848000" />
       <workItem from="1728886640471" duration="744000" />
       <workItem from="1728892840456" duration="10287000" />
-      <workItem from="1728909508899" duration="4605000" />
+      <workItem from="1728909508899" duration="21142000" />
+      <workItem from="1728962224905" duration="13673000" />
+      <workItem from="1728986961776" duration="12542000" />
     </task>
     <servers />
   </component>
