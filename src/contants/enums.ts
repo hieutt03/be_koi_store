@@ -43,13 +43,6 @@ export enum FishStatus {
     Sick = "sick"
 }
 
-export enum OrderEsignDetailStatus {
-    Sold = 'sold',
-    Processing = 'processing',
-    Shipping = 'shipping',
-    Pending = 'pending',
-}
-
 
 export enum OrderStatus {
     Shipping = 'shipping',
