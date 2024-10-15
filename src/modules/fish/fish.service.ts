@@ -24,9 +24,9 @@ export class FishService {
         }
     }
 
-    static async createFish(fish: FishCreationAttributes): Promise<Fish> {
+    static async createFish(fish: FishCreationAttributes, transaction?:Transaction): Promise<Fish> {
         try {
-            return await Fish.create(fish);
+            return await Fish.create(fish,{transaction});
         } catch (e: any) {
             throw Error(e.message || "Something went wrong.");
         }

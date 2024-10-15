@@ -35,3 +35,10 @@ export const isManager = async (req: AuthRequest, res: Response, next: NextFunct
     }
     next();
 };
+
+export const isStaffOrManager=async (req: AuthRequest, res: Response, next: NextFunction) => {
+    if (req.user?.role !== Role.Manager && req.user?.role !== Role.Staff) {
+        return next(new BadRequestException("Unauthorized. You don't have permission to use this function"));
+    }
+    next();
+};

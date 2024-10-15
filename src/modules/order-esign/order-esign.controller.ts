@@ -1,73 +1,103 @@
 import {NextFunction, Request, Response} from "express";
 import {badRequest, created} from "../../utils/util";
 import {OrderEsignService} from "./order-esign.service";
-import {EsignStatus, FishStatus, OrderEsignDetailStatus} from "../../contants/enums";
+import {EsignStatus, Status} from "../../contants/enums";
+import {OrderEsginRequestCreation} from "../../dto/order-esign/order-esign.request";
+import sequelize from "../../config/db";
+import User from "../../models/user.model";
+import {OrderEsignCreationAttributes} from "../../models/order-esign.model";
+import {FishService} from "../fish/fish.service";
+import {PackageService} from "../package/package.service";
 
-interface EsignDataDetail {
-  id: number,
-  status: FishStatus
-  quantity?: number
-}
-
-interface EsignData {
-  fish: EsignDataDetail[],
-  package: EsignDataDetail[],
-}
 
 export const createOrderEsign = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const { userId, staffId, orderDate, expireDate, data } = req.body;
-    
-    if (!userId ||   !orderDate || !expireDate) {
-      badRequest(res, "Please enter a valid information!");
-      return;
-    }
-    
-    if (data === null || data === undefined) {
-      badRequest(res, "Please enter valid fishes!");
-      return;
-    }
-    
-    const orderEsign = await OrderEsignService.createEsign({
-      userId,
-      staffId,
-      receiveDate: orderDate,
-      expiryDate: expireDate,
-      status: EsignStatus.Pending
-    });
-    
-    const infoData = data as EsignData;
-    
-    const fishData = infoData.fish;
-    const packageData = infoData.package;
-    
-    if (fishData !== null) {
-      for (let fish of fishData) {
-        await OrderEsignService.createEsignDetail({
-          fishId: fish.id,
-          status: fish.status,
-          orderEsignId: orderEsign.orderEsignId,
-          orderStatus: OrderEsignDetailStatus.Pending,
-          quantity: 1
-        });
-      }
-    }
+    const t = await sequelize.transaction();
+    try {
+        const data = req.body as OrderEsginRequestCreation;
+        const existingBuyer = await User.findOne({where: {userId: data.buyerId}});
+        if (!existingBuyer) {
+            badRequest(res, "User not found", data)
+            return
+        }
 
-    if (packageData !== null) {
-      for (let container of packageData) {
-        await OrderEsignService.createEsignDetail({
-          packageId: container.id,
-          status: container.status,
-          orderEsignId: orderEsign.orderEsignId,
-          orderStatus: OrderEsignDetailStatus.Pending,
-          quantity: container.quantity ?? 1
-        });
-      }
+        if (!data.receiveDate || !data.expireDate) {
+            badRequest(res, "Receive date and expire date is required", data)
+            return
+        }
+
+
+        const dataOrder: OrderEsignCreationAttributes = {
+            userId: data.buyerId,
+            status: EsignStatus.Processing,
+            receiveDate: data.receiveDate,
+            expiryDate: data.expireDate,
+        }
+
+        const newOrderEsign = await OrderEsignService.createEsign(dataOrder, t)
+
+        // let cost = 0;
+        const fishList = data.fishes;
+        const packageList = data.packages;
+
+        if (fishList.length > 0) {
+            for (let fish of fishList) {
+
+                const newFish = await FishService.createFish({
+                    ...fish,
+                    price: fish.isNeedEstimated ? 0 : fish.price,
+                    unique: true,
+                    status: Status.PendingEsign
+                }, t);
+
+                await OrderEsignService.createEsignDetail({
+                    fishId: newFish.fishId,
+                    quantity: 1,
+                    orderStatus: EsignStatus.Pending,
+                    orderEsignId: newOrderEsign.orderEsignId
+                }, t)
+
+            }
+        }
+
+        if (packageList.length > 0) {
+            for (let container of packageList) {
+                const newFish = await FishService.createFish({
+                    ...container,
+                    price: container.isNeedEstimated ? 0 : container.price,
+                    unique: true
+                }, t);
+
+                const newPackage = await PackageService.create({
+                    fishId: newFish.fishId,
+                    name: `Package ${container.initQuantity} ${newFish?.name}`,
+                    quantity: container.initQuantity,
+                    ownerId: data.buyerId,
+                }, t)
+
+                await OrderEsignService.createEsignDetail({
+                    packageId: newPackage.packageId,
+                    quantity: 1,
+                    orderStatus: EsignStatus.Pending,
+                    orderEsignId: newOrderEsign.orderEsignId
+                }, t)
+            }
+        }
+
+        await t.commit()
+        created(res, "Create order success!");
+
+    } catch (e) {
+        await t.rollback()
+        next(e);
     }
-    
-    created(res, "Create order success!");
-    
-  } catch (e) {
-    next(e);
-  }
 };
+
+export const updateOrderEsgin = async (req: Request, res: Response, next: NextFunction) => {
+    const t = await sequelize.transaction();
+    try {
+
+    } catch (e) {
+        await t.rollback()
+        next(e);
+    }
+}

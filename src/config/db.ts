@@ -29,7 +29,7 @@ const sequelizeWithDB = new Sequelize(
     await sequelizeWithDB.authenticate();
     console.log('Connect database success.');
     
-    await sequelizeWithDB.sync({ force: false});
+    await sequelizeWithDB.sync({force:false});
     console.log('Table in database async success.');
     
   } catch (error) {

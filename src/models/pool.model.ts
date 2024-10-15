@@ -64,7 +64,6 @@ Pool.init(
         code: {
             type: DataTypes.STRING(128),
             allowNull: false,
-            unique:true
         },
         status: {
             type: DataTypes.ENUM(...Object.values(PoolStatus)),

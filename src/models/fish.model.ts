@@ -1,6 +1,6 @@
 import {DataTypes, Model, Optional} from "sequelize";
 import sequelize from "../config/db";
-import {Status, Type} from "../contants/enums";
+import {FishStatus, Status, Type} from "../contants/enums";
 import OriginFish from "./origin-fish.model";
 import Pool from "./pool.model";
 import User from "./user.model";
@@ -23,11 +23,11 @@ interface FishAttributes {
     foodIntake: string;
     screeningRate: number;
     unique: boolean;
-    packageId: number;
     poolId: number;
     initQuantity: number;
     remainQuantity: number;
     soldQuantity: number;
+    healthStatus: FishStatus
 }
 
 export interface FishCreationAttributes extends Optional<FishAttributes, "fishId"> {
@@ -42,7 +42,6 @@ class Fish extends Model<FishAttributes, FishCreationAttributes> implements Fish
     public foodIntake!: string;
     public image!: string;
     public origin!: number;
-    public packageId!: number;
     public poolId!: number;
     public price!: number;
     public screeningRate!: number;
@@ -56,6 +55,7 @@ class Fish extends Model<FishAttributes, FishCreationAttributes> implements Fish
     public initQuantity!: number;
     public remainQuantity!: number;
     public soldQuantity!: number;
+   public healthStatus!: FishStatus
 }
 
 Fish.init(
@@ -133,13 +133,9 @@ Fish.init(
             type: DataTypes.FLOAT,
             allowNull: true,
         },
-        packageId: {
-            type: DataTypes.INTEGER.UNSIGNED,
-            allowNull: true,
-        },
         poolId: {
             type: DataTypes.INTEGER.UNSIGNED,
-            allowNull: false,
+            allowNull: true,
             references: {
                 model: Pool,
                 key: "poolId",
@@ -157,6 +153,10 @@ Fish.init(
             type: DataTypes.BOOLEAN,
             allowNull: false,
         },
+        healthStatus:{
+            type: DataTypes.ENUM(...Object.values(FishStatus)),
+            defaultValue: FishStatus.Healthy
+        }
     },
     {
         tableName: "fishes",

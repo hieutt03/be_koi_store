@@ -3,7 +3,7 @@ import sequelize from "../config/db";
 import Fish from "./fish.model";
 import OrderSale from "./order-sale.model";
 import Package from "./package.model";
-import {FishOrderStatus} from "../contants/enums";
+import {OrderStatus} from "../contants/enums";
 
 
 export interface OrderSaleDetailAttributes {
@@ -13,7 +13,7 @@ export interface OrderSaleDetailAttributes {
     fishId: number;
     packageId: number
     initPrice: number
-    status: FishOrderStatus;
+    status: OrderStatus;
 }
 
 export interface OrderSaleDetailCreationAttributes extends Optional<OrderSaleDetailAttributes, "orderSaleDetailId" | "packageId" | "fishId"> {
@@ -28,7 +28,7 @@ class OrderSaleDetail
     public fishId!: number;
     public initPrice!: number
     public packageId!: number
-    public status!: FishOrderStatus
+    public status!: OrderStatus
 }
 
 OrderSaleDetail.init(
@@ -67,8 +67,8 @@ OrderSaleDetail.init(
             }
         },
         status: {
-            type: DataTypes.ENUM(...Object.values(FishOrderStatus)),
-            defaultValue: FishOrderStatus.Processing,
+            type: DataTypes.ENUM(...Object.values(OrderStatus)),
+            defaultValue: OrderStatus.Processing,
         },
         initPrice: {
             type: DataTypes.INTEGER,

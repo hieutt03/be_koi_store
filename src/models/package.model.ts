@@ -13,7 +13,7 @@ interface PackageAttributes {
     fishId: number;
 }
 
-export interface PackageCreationAttributes extends Optional<PackageAttributes, "packageId"> {
+export interface PackageCreationAttributes extends Optional<PackageAttributes, "packageId"|"poolId"> {
 }
 
 class Package extends Model<PackageAttributes, PackageCreationAttributes> implements PackageAttributes {
