@@ -13,12 +13,6 @@ export enum Role {
     Staff = "staff",
 }
 
-export enum Type {
-    ImportedPurebred = "Thuần chủng nhập khẩu",
-    HybridF1 = "Lai F1",
-    PureVietnamese = "Thuần Việt",
-}
-
 export enum PoolType {
     General = "general",
     Specific = "specific",

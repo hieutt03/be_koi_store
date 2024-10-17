@@ -24,9 +24,21 @@ export class FishService {
         }
     }
 
-    static async createFish(fish: FishCreationAttributes, transaction?:Transaction): Promise<Fish> {
+    static async getQuantityOfPoolId(poolId: number): Promise<number> {
         try {
-            return await Fish.create(fish,{transaction});
+            return Fish.sum('remainQuantity', {
+                where: {
+                    poolId
+                }
+            })
+        } catch (e: any) {
+            throw Error(e.message || "Something went wrong.");
+        }
+    }
+
+    static async createFish(fish: FishCreationAttributes, transaction?: Transaction): Promise<Fish> {
+        try {
+            return await Fish.create(fish, {transaction});
         } catch (e: any) {
             throw Error(e.message || "Something went wrong.");
         }
@@ -66,7 +78,7 @@ export class FishService {
         try {
             const [updateRows] = await Fish.update({
                 remainQuantity: sequelize.literal(`remainQuantity - ${quantity}`),
-                status
+                status,
             }, {
                 where: {
                     fishId: fishId
@@ -94,8 +106,18 @@ export class FishService {
 
     static async getPrice(fishId: number): Promise<Fish | null> {
         try {
-            return Fish.findByPk(Number(fishId), {
-                attributes: ['price', 'unique', 'status', 'name']
+            return await Fish.findByPk(Number(fishId), {
+                attributes: ['price', 'unique', 'status', 'name', 'poolId']
+            });
+        } catch (e: any) {
+            throw Error(e.message || "Something went wrong.");
+        }
+    }
+
+    static async getStatus(fishId: number): Promise<Fish | null> {
+        try {
+            return await Fish.findByPk(fishId, {
+                attributes: ['status']
             });
         } catch (e: any) {
             throw Error(e.message || "Something went wrong.");
@@ -112,5 +134,13 @@ export class FishService {
         }
     }
 
+    static async updateFish(fishId: number, data: FishCreationAttributes): Promise<boolean> {
+        try {
+            const [updateRows] = await Fish.update(data, {where: {fishId}});
+            return updateRows > 0
+        } catch (e: any) {
+            throw Error(e.message || "Something went wrong.");
+        }
+    }
 
 }

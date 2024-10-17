@@ -12,6 +12,7 @@ import sequelize from "../../config/db";
 import {getDiscountPackages} from "../../utils/discount-package";
 import {formatDate} from "../../utils/formatDate";
 import {AuthRequest} from "../../types/auth-request";
+import {PoolService} from "../pool/pool.service";
 
 export const getAllOrderSale = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -90,7 +91,9 @@ export const createOrderSale = async (req: AuthRequest, res: Response, next: Nex
                     orderSaleId: newOrderSale.orderSaleId
                 }, t)
 
-                await FishService.updateStatusAndQuantity(fish.id, fish.quantity, Status.Sold, t)
+                await FishService.updateStatusAndQuantity(fish.id, fish.quantity, Status.Sold, t);
+
+                await PoolService.updatePoolAfterSoldOut(currentFish.poolId,t )
             }
         }
         if (packageList.length > 0) {
@@ -111,9 +114,11 @@ export const createOrderSale = async (req: AuthRequest, res: Response, next: Nex
 
                 if (currentFish.remainQuantity === container.quantity) {
                     updateStatus = Status.Sold
+                    await PoolService.updatePoolAfterSoldOut(currentFish.poolId,t )
                 }
 
-                await FishService.updateStatusAndQuantity(container.id, container.quantity, updateStatus, t)
+
+                await FishService.updateStatusAndQuantity(container.id, container.quantity, updateStatus, t,)
 
 
                 const discount = getDiscountPackages(container.quantity)
