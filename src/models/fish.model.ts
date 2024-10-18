@@ -31,7 +31,7 @@ interface FishAttributes {
     ownerId: number
 }
 
-export interface FishCreationAttributes extends Optional<FishAttributes, "fishId"> {
+export interface FishCreationAttributes extends Optional<FishAttributes, "fishId" |"ownerId"> {
 }
 
 class Fish extends Model<FishAttributes, FishCreationAttributes> implements FishAttributes {
@@ -160,9 +160,9 @@ Fish.init(
             defaultValue: FishStatus.Healthy
         },
         ownerId: {
-
-            type: DataTypes.NUMBER,
-            allowNull: true, references: {
+            type: DataTypes.INTEGER.UNSIGNED,
+            allowNull: true,
+            references: {
                 model: User,
                 key: "userId",
             }
@@ -173,13 +173,13 @@ Fish.init(
         sequelize,
     }
 );
-// Fish.belongsTo(User, {foreignKey: "ownerId"});
+Fish.belongsTo(User, {foreignKey: "ownerId"});
 User.hasMany(Fish, {foreignKey: "ownerId"});
 
-// Fish.belongsTo(Pool, {foreignKey: "poolId"});
-Pool.hasMany(Fish, {
-    foreignKey: "poolId",
-});
+Fish.belongsTo(Pool, {foreignKey: "poolId"});
+// Pool.hasMany(Fish, {
+//     foreignKey: "poolId",
+// });
 OriginFish.hasMany(Fish, {foreignKey: "origin"});
 Fish.belongsTo(OriginFish, {foreignKey: "origin"});
 

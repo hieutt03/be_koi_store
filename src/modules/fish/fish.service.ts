@@ -26,11 +26,11 @@ export class FishService {
 
     static async getQuantityOfPoolId(poolId: number): Promise<number> {
         try {
-            return Fish.sum('remainQuantity', {
+            return await Fish.sum('remainQuantity', {
                 where: {
                     poolId
                 }
-            })
+            }) ?? 0
         } catch (e: any) {
             throw Error(e.message || "Something went wrong.");
         }
@@ -78,6 +78,7 @@ export class FishService {
         try {
             const [updateRows] = await Fish.update({
                 remainQuantity: sequelize.literal(`remainQuantity - ${quantity}`),
+                soldQuantity: sequelize.literal(`soldQuantity + ${quantity}`),
                 status,
             }, {
                 where: {

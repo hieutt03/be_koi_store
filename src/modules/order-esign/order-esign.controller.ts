@@ -5,7 +5,7 @@ import {EsignStatus, Status} from "../../contants/enums";
 import {OrderEsginRequestCreation} from "../../dto/order-esign/order-esign.request";
 import sequelize from "../../config/db";
 import User from "../../models/user.model";
-import OrderEsign, {OrderEsignCreationAttributes} from "../../models/order-esign.model";
+import {OrderEsignCreationAttributes} from "../../models/order-esign.model";
 import {FishService} from "../fish/fish.service";
 import {PackageService} from "../package/package.service";
 import {AuthRequest} from "../../types/auth-request";
@@ -25,7 +25,6 @@ export const createOrderEsign = async (req: Request, res: Response, next: NextFu
             badRequest(res, "Receive date and expire date is required", data)
             return
         }
-
 
         const dataOrder: OrderEsignCreationAttributes = {
             userId: data.buyerId,
@@ -85,7 +84,7 @@ export const createOrderEsign = async (req: Request, res: Response, next: NextFu
         }
 
         await t.commit()
-        created(res, "Create order success!");
+        created(res, "Create order success!", newOrderEsign);
 
     } catch (e) {
         await t.rollback()
@@ -96,7 +95,6 @@ export const createOrderEsign = async (req: Request, res: Response, next: NextFu
 export const confirmOrderEsginByCustomer = async (req: AuthRequest, res: Response, next: NextFunction) => {
     const t = await sequelize.transaction();
     try {
-
         const orderEsignId = req.params.orderEsignId;
         const {status} = req.body;
 
@@ -146,6 +144,40 @@ export const confirmOrderEsginDetailByCustomer = async (req: AuthRequest, res: R
 
     } catch (e) {
         await t.rollback()
+        next(e);
+    }
+}
+export const updateEsginDetail = async (req: AuthRequest, res: Response, next: NextFunction) => {
+    const t = await sequelize.transaction();
+    try {
+        const orderEsignId = req.params.orderEsignId;
+        const data = req.body;
+
+    } catch (e) {
+        await t.rollback()
+        next(e);
+    }
+}
+
+export const updateTotalEsign = async (req: AuthRequest, res: Response, next: NextFunction) =>{
+    const t = await sequelize.transaction();
+    try {
+        const orderEsignId = req.params.orderEsignId;
+
+
+    } catch (e) {
+        await t.rollback()
+        next(e);
+    }
+}
+export const getOrderEsgin = async (req: AuthRequest, res: Response, next: NextFunction) => {
+    try {
+        const orderEsignId = req.params.orderEsignId;
+        const data = await OrderEsignService.getById(Number(orderEsignId));
+        ok(res, "Get data success", data)
+
+
+    } catch (e) {
         next(e);
     }
 }

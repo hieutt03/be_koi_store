@@ -9,7 +9,6 @@ export type OrderEsginRequestCreation = {
     staffId?: number,
     receiveDate: Date,
     expireDate: Date
-
     fishes: EsignDataDetail[],
     packages: EsignDataDetail[],
 

@@ -1,6 +1,6 @@
 import Pool, {PoolCreationAttributes} from "../../models/pool.model";
 import {PoolStatus} from "../../contants/enums";
-import {Transaction} from "sequelize";
+import sequelize, {Transaction} from "sequelize";
 
 export class PoolService {
     static async getAllPools(): Promise<Pool[]> {
@@ -36,9 +36,12 @@ export class PoolService {
         }
     }
 
-    static async updatePoolAfterSoldOut(poolId: number, transaction?: Transaction): Promise<boolean> {
+    static async updatePoolAfterSoldOut(poolId: number, quantity: number, transaction?: Transaction): Promise<boolean> {
         try {
-            const [updateRows] = await Pool.update({status: PoolStatus.Available}, {
+            const [updateRows] = await Pool.update({
+                status: sequelize.literal(`CASE WHEN currentQuantity = ${quantity} THEN '${PoolStatus.Available}' ELSE '${PoolStatus.Inactive}' END`),
+                currentQuantity: sequelize.literal(`currentQuantity - ${quantity}`)
+            }, {
                 where: {
                     poolId
                 }, transaction
@@ -69,7 +72,7 @@ export class PoolService {
     static async getOrigin(poolId: number): Promise<Pool | null> {
         try {
             return await Pool.findByPk(Number(poolId), {
-                attributes: ['origin', 'type', 'status', 'maxQuantity','currentQuantity']
+                attributes: ['origin', 'type', 'status', 'maxQuantity', 'currentQuantity', 'poolId']
             });
         } catch (e: any) {
             throw Error(e.message || "Something went wrong.");
@@ -91,14 +94,15 @@ export class PoolService {
         }
     }
 
-    static async getPoolAvailable(): Promise<Pool[]>{
+    static async getPoolAvailable(origin: number): Promise<Pool[]> {
         try {
             return Pool.findAll({
                 order: [
                     ["createdAt", "DESC"]
                 ],
-                where:{
-                    status: PoolStatus.Available
+                where: {
+                    status: PoolStatus.Available,
+                    origin
                 }
             });
         } catch (e: any) {

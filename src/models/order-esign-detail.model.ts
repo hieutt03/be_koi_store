@@ -77,7 +77,7 @@ OrderEsignDetail.init({
 
 OrderEsignDetail.belongsTo(OrderEsign, {foreignKey: "orderEsignId"});
 OrderEsign.hasMany(OrderEsignDetail, {
-    foreignKey: "orderEsignId"
+    foreignKey: "orderEsignId",  as: "orderDetails"
 });
 
 OrderEsignDetail.hasOne(Fish, {foreignKey: "fishId"});

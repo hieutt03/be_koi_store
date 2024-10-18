@@ -1,6 +1,6 @@
 import {NextFunction, Request, Response} from "express";
 import {FishService} from "./fish.service";
-import {FishCreationAttributes} from "../../models/fish.model";
+import fishModel, {FishCreationAttributes} from "../../models/fish.model";
 import {badRequest, created, internalServerError, ok} from "../../utils/util";
 import {PoolService} from "../pool/pool.service";
 import sequelize from "../../config/db";
@@ -45,14 +45,23 @@ export const createFish = async (req: Request, res: Response, next: NextFunction
             return
         }
 
-        const currentQuantityOfPool = await FishService.getQuantityOfPoolId(fishData.poolId);
-        if (!fishData.unique || pool.maxQuantity === currentQuantityOfPool) {
-            pool.status = PoolStatus.Inactive;
 
+        const currentQuantityOfPool = await FishService.getQuantityOfPoolId(fishData.poolId);
+        if (fishData.initQuantity + pool.currentQuantity > pool.maxQuantity) {
+            badRequest(res, "Too much fishes in this pool", fishData);
+            return
+        }
+        if (!fishData.unique || pool.maxQuantity <= (currentQuantityOfPool + fishData.initQuantity)) {
+            pool.status = PoolStatus.Inactive;
         }
         pool.currentQuantity += fishData.initQuantity;
         await pool.save({transaction: t})
-        const newFish = await FishService.createFish({...fishData, remainQuantity: fishData.initQuantity}, t);
+        const newFish = await FishService.createFish({
+            ...fishData,
+            remainQuantity: fishData.initQuantity,
+            soldQuantity: 0,
+            ownerId: undefined
+        }, t);
         await t.commit()
         created(res, "Created Fish", newFish);
     } catch (e) {

@@ -1,4 +1,4 @@
-import OrderEsign, {OrderEsignCreationAttributes} from "../../models/order-esign.model";
+import OrderEsign, {OrderEsignCreationAttributes, OrderEsignFullAttributes} from "../../models/order-esign.model";
 import OrderEsignDetail, {OrderEsignDetailCreationAttributes} from "../../models/order-esign-detail.model";
 import {Transaction} from "sequelize";
 import {EsignStatus, FishStatus, OrderStatus, Status} from "../../contants/enums";
@@ -20,9 +20,17 @@ export class OrderEsignService {
         }
     }
 
-    static async getById(orderEsignId: number): Promise<OrderEsign | null> {
+    static async getById(orderEsignId: number): Promise<OrderEsignFullAttributes | null> {
         try {
-            return await OrderEsign.findByPk(orderEsignId)
+            return await OrderEsign.findByPk(orderEsignId,{
+                include: [
+                    {
+                        model: OrderEsignDetail,
+                        as: "orderDetails",
+                        required: true
+                    }
+                ]
+            })
         } catch (e: any) {
             throw Error(e.message || "Something went wrong.");
         }
